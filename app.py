@@ -168,30 +168,42 @@ st.markdown("""
     }
 
     /* ================== STYLE DES CONTRÔLES ================== */
-    .stSelectbox > div > div {
+    /* Forcer TOUS les inputs en thème sombre */
+    .stSelectbox > div > div, .stSelectbox div[data-baseweb="select"], 
+    .stMultiSelect > div > div, .stMultiSelect div[data-baseweb="select"],
+    .stDateInput > div > div, .stDateInput input,
+    .stTextInput > div > div, .stTextInput input,
+    .stNumberInput > div > div, .stNumberInput input,
+    .stSlider > div > div,
+    input, select, textarea {
         background-color: #262730 !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         border-radius: 8px !important;
         color: #FFFFFF !important;
     }
 
-    .stMultiSelect > div > div {
+    /* Forcer les options des dropdowns */
+    [data-baseweb="popover"] {
         background-color: #262730 !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        border-radius: 8px !important;
     }
 
-    .stDateInput > div > div {
+    [data-baseweb="menu"] {
         background-color: #262730 !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        border-radius: 8px !important;
+    }
+
+    [data-baseweb="menu"] li {
+        background-color: #262730 !important;
         color: #FFFFFF !important;
     }
 
-    .stTextInput > div > div {
-        background-color: #262730 !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        border-radius: 8px !important;
+    [data-baseweb="menu"] li:hover {
+        background-color: #1E2028 !important;
+        color: #FFFFFF !important;
+    }
+
+    /* Forcer les tags des multiselect */
+    [data-baseweb="tag"] {
+        background-color: #FF4B4B !important;
         color: #FFFFFF !important;
     }
 
@@ -275,6 +287,86 @@ st.markdown("""
         background-color: #262730 !important;
     }
 
+    /* ================== FORCER THÈME SOMBRE PARTOUT ================== */
+    /* Règles ultra-agressives pour éliminer TOUT fond blanc */
+    * {
+        scrollbar-color: #FF4B4B #262730 !important;
+    }
+
+    /* Forcer tous les conteneurs possibles */
+    div, section, main, header, footer, article, aside, nav {
+        background-color: transparent !important;
+    }
+
+    /* Forcer les éléments Streamlit spécifiques */
+    .element-container, .stContainer, .block-container {
+        background-color: transparent !important;
+    }
+
+    /* Forcer tous les widgets avec fond blanc */
+    [class*="st"] div[style*="background-color: white"],
+    [class*="st"] div[style*="background-color: #ffffff"],
+    [class*="st"] div[style*="background-color: #FFFFFF"],
+    [class*="st"] div[style*="background: white"],
+    [class*="st"] div[style*="background: #ffffff"],
+    [class*="st"] div[style*="background: #FFFFFF"] {
+        background-color: #262730 !important;
+        background: #262730 !important;
+    }
+
+    /* Forcer les popups et modales */
+    [role="dialog"], [role="tooltip"], [role="menu"], [role="listbox"] {
+        background-color: #262730 !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: #FFFFFF !important;
+    }
+
+    /* Forcer les scrollbars */
+    ::-webkit-scrollbar {
+        width: 8px;
+        background-color: #1E2028 !important;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #FF4B4B !important;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #262730 !important;
+    }
+
+    /* Forcer les éléments avec background blanc inline */
+    [style*="background-color: white"] {
+        background-color: #262730 !important;
+    }
+
+    [style*="background-color: #ffffff"] {
+        background-color: #262730 !important;
+    }
+
+    [style*="background-color: #FFFFFF"] {
+        background-color: #262730 !important;
+    }
+
+    [style*="background: white"] {
+        background: #262730 !important;
+    }
+
+    [style*="background: #ffffff"] {
+        background: #262730 !important;
+    }
+
+    [style*="background: #FFFFFF"] {
+        background: #262730 !important;
+    }
+
+    /* Forcer les listes déroulantes */
+    ul[role="listbox"], li[role="option"] {
+        background-color: #262730 !important;
+        color: #FFFFFF !important;
+    }
+
     /* ================== RESPONSIVE ================== */
     @media (max-width: 768px) {
         .main-title {
@@ -288,7 +380,44 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# JavaScript pour forcer le thème sombre sur tous les éléments dynamiques
+st.markdown("""
+<script>
+// Fonction pour forcer le thème sombre sur tous les éléments
+function forceDarkTheme() {
+    // Forcer tous les éléments avec background blanc
+    const whiteElements = document.querySelectorAll('*');
+    whiteElements.forEach(el => {
+        const style = window.getComputedStyle(el);
+        if (style.backgroundColor === 'rgb(255, 255, 255)' || 
+            style.backgroundColor === 'white' ||
+            style.backgroundColor === '#ffffff' ||
+            style.backgroundColor === '#FFFFFF') {
+            el.style.backgroundColor = '#262730';
+            el.style.color = '#FFFFFF';
+        }
+    });
+    
+    // Forcer les inputs spécifiquement
+    const inputs = document.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        input.style.backgroundColor = '#262730';
+        input.style.color = '#FFFFFF';
+        input.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+    });
+}
 
+// Exécuter au chargement et à chaque modification
+document.addEventListener('DOMContentLoaded', forceDarkTheme);
+new MutationObserver(forceDarkTheme).observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+// Exécuter toutes les 500ms pour capturer les éléments tardifs
+setInterval(forceDarkTheme, 500);
+</script>
+""", unsafe_allow_html=True)
 
 # En-tête principal
 st.markdown("""
