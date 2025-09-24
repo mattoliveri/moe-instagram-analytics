@@ -303,6 +303,55 @@ st.markdown("""
         background: #262730 !important;
     }
 
+    /* RÈGLES ULTRA-AGRESSIVES POUR LE TABLEAU */
+    /* Cibler tous les tableaux possibles */
+    table, .stDataFrame table, [data-testid="stDataFrame"] table {
+        background-color: #262730 !important;
+        background: #262730 !important;
+        color: #FFFFFF !important;
+    }
+
+    /* Cibler TOUS les éléments de tableau */
+    thead, tbody, tr, th, td,
+    .stDataFrame thead, .stDataFrame tbody, .stDataFrame tr, .stDataFrame th, .stDataFrame td,
+    [data-testid="stDataFrame"] thead, [data-testid="stDataFrame"] tbody, 
+    [data-testid="stDataFrame"] tr, [data-testid="stDataFrame"] th, [data-testid="stDataFrame"] td {
+        background-color: #262730 !important;
+        background: #262730 !important;
+        color: #FFFFFF !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Force spéciale pour les en-têtes */
+    th, .stDataFrame th, [data-testid="stDataFrame"] th {
+        background-color: #1E2028 !important;
+        background: #1E2028 !important;
+        color: #FFFFFF !important;
+        border-bottom: 2px solid #FF4B4B !important;
+    }
+
+    /* FORCER avec des sélecteurs CSS très spécifiques */
+    div[data-testid="stDataFrame"] > div > div > div > table {
+        background-color: #262730 !important;
+        background: #262730 !important;
+    }
+
+    div[data-testid="stDataFrame"] > div > div > div > table > thead {
+        background-color: #1E2028 !important;
+        background: #1E2028 !important;
+    }
+
+    div[data-testid="stDataFrame"] > div > div > div > table > thead > tr {
+        background-color: #1E2028 !important;
+        background: #1E2028 !important;
+    }
+
+    div[data-testid="stDataFrame"] > div > div > div > table > thead > tr > th {
+        background-color: #1E2028 !important;
+        background: #1E2028 !important;
+        color: #FFFFFF !important;
+    }
+
     /* ================== STYLE DES BOUTONS ================== */
     .stDownloadButton > button {
         background: linear-gradient(135deg, #FF4B4B 0%, #FF6B6B 100%) !important;
@@ -498,8 +547,43 @@ new MutationObserver(forceDarkTheme).observe(document.body, {
     subtree: true
 });
 
-// Exécuter toutes les 500ms pour capturer les éléments tardifs
-setInterval(forceDarkTheme, 500);
+// Exécuter plus souvent pour capturer les éléments tardifs
+setInterval(forceDarkTheme, 100);
+
+// FONCTION SPÉCIALE pour forcer les tableaux récalcitrants
+function forceTableTheme() {
+    // Cibler TOUS les tableaux
+    const tables = document.querySelectorAll('table, thead, tbody, tr, th, td');
+    tables.forEach(element => {
+        element.style.setProperty('background-color', '#262730', 'important');
+        element.style.setProperty('background', '#262730', 'important');
+        element.style.setProperty('color', '#FFFFFF', 'important');
+    });
+    
+    // Cibler spécifiquement les en-têtes
+    const headers = document.querySelectorAll('th');
+    headers.forEach(header => {
+        header.style.setProperty('background-color', '#1E2028', 'important');
+        header.style.setProperty('background', '#1E2028', 'important');
+        header.style.setProperty('color', '#FFFFFF', 'important');
+        header.style.setProperty('border-bottom', '2px solid #FF4B4B', 'important');
+    });
+    
+    // Utiliser removeAttribute puis remettre le style pour forcer
+    document.querySelectorAll('[data-testid="stDataFrame"] *').forEach(el => {
+        // Supprimer tous les styles inline qui pourraient bloquer
+        if (el.style.backgroundColor === 'white' || 
+            el.style.backgroundColor === '#ffffff' ||
+            el.style.backgroundColor === 'rgb(255, 255, 255)') {
+            el.removeAttribute('style');
+        }
+        el.style.setProperty('background-color', '#262730', 'important');
+        el.style.setProperty('color', '#FFFFFF', 'important');
+    });
+}
+
+// Exécuter la fonction spéciale table encore plus souvent
+setInterval(forceTableTheme, 50);
 </script>
 """, unsafe_allow_html=True)
 
