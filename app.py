@@ -162,13 +162,12 @@ def show_login_screen():
                 else:
                     st.error("❌ Identifiant ou mot de passe incorrect")
             
-            # Information d'aide (à supprimer en production)
-            with st.expander("ℹ️ Informations de connexion", expanded=False):
-                st.info("""
-                **Identifiants de test :**
-                - Identifiant : `admin`
-                - Mot de passe : `AdminMOE13`
-                """)
+            # Message de sécurité
+            st.markdown("""
+            <div style="text-align: center; margin-top: 2rem; color: rgba(255,255,255,0.6); font-size: 0.9rem;">
+                🔒 Accès sécurisé - Contactez MOE pour obtenir vos identifiants
+            </div>
+            """, unsafe_allow_html=True)
 
 # Fonction de déconnexion
 def logout():
@@ -287,15 +286,55 @@ st.markdown("""
         margin: 1.5rem 0 1rem 0 !important;
     }
 
-    /* Style pour tout le texte */
-    .stMarkdown, .stText, p, div, span, label {
+    /* FORCER TOUS LES TEXTES EN BLANC - ULTRA AGRESSIF */
+    .stMarkdown, .stMarkdown *, .stText, .stText *, 
+    p, div, span, label, small, strong, em, i, b,
+    .stSelectbox *, .stMultiSelect *, .stDateInput *, 
+    .stTextInput *, .stSlider *, .stNumberInput *,
+    .stRadio *, .stCheckbox *, .stButton *,
+    [data-testid] *, [class*="st"] * {
         color: #FFFFFF !important;
     }
 
-    /* Style pour les labels des widgets */
-    .stSelectbox label, .stMultiSelect label, .stDateInput label, .stTextInput label, .stSlider label {
+    /* Labels spécifiques avec contraste maximal */
+    .stSelectbox label, .stMultiSelect label, .stDateInput label, 
+    .stTextInput label, .stSlider label, .stNumberInput label,
+    .stRadio label, .stCheckbox label {
         color: #FFFFFF !important;
-        font-weight: 500 !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+    }
+
+    /* Texte dans les métriques - BLANC PUR */
+    [data-testid="stMetric"] *, 
+    [data-testid="stMetric"] label,
+    [data-testid="stMetric"] div {
+        color: #FFFFFF !important;
+    }
+
+    /* Texte dans les inputs - BLANC PUR */
+    input, select, textarea, option {
+        color: #FFFFFF !important;
+        background-color: #262730 !important;
+    }
+
+    /* Placeholders visibles */
+    input::placeholder, textarea::placeholder {
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    /* Texte des boutons - BLANC PUR */
+    button, .stButton button, [role="button"] {
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+    }
+
+    /* ÉLIMINER TOUT TEXTE GRIS FONCÉ */
+    [style*="color: rgb(49, 51, 63)"],
+    [style*="color: #31333f"],
+    [style*="color: rgb(38, 39, 48)"],
+    [style*="color: #262730"] {
+        color: #FFFFFF !important;
     }
 
     /* ================== STYLE DES ONGLETS ================== */
@@ -673,14 +712,37 @@ function forceDarkTheme() {
             el.style.backgroundColor = '#262730';
             el.style.color = '#FFFFFF';
         }
+        
+        // FORCER TOUS LES TEXTES GRIS FONCÉ EN BLANC
+        if (style.color === 'rgb(49, 51, 63)' ||  // #31333f
+            style.color === 'rgb(38, 39, 48)' ||  // #262730
+            style.color === 'rgb(30, 32, 40)' ||  // #1E2028
+            style.color === '#31333f' ||
+            style.color === '#262730' ||
+            style.color === '#1E2028') {
+            el.style.setProperty('color', '#FFFFFF', 'important');
+        }
     });
     
     // Forcer les inputs spécifiquement
     const inputs = document.querySelectorAll('input, select, textarea');
     inputs.forEach(input => {
-        input.style.backgroundColor = '#262730';
-        input.style.color = '#FFFFFF';
-        input.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+        input.style.setProperty('background-color', '#262730', 'important');
+        input.style.setProperty('color', '#FFFFFF', 'important');
+        input.style.setProperty('border', '1px solid rgba(255, 255, 255, 0.2)', 'important');
+    });
+    
+    // Forcer TOUS les labels en blanc
+    const labels = document.querySelectorAll('label, .stMarkdown p, .stText');
+    labels.forEach(label => {
+        label.style.setProperty('color', '#FFFFFF', 'important');
+    });
+    
+    // Forcer les boutons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.style.setProperty('color', '#FFFFFF', 'important');
+        button.style.setProperty('font-weight', '600', 'important');
     });
     
     // FORCE MODÉRÉE pour les DataFrames de Streamlit
