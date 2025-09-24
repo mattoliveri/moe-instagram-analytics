@@ -109,7 +109,7 @@ st.markdown("""
     }
 
     /* ================== STYLE DES SECTIONS ================== */
-    h1, h2, h3 {
+    h1, h2, h3, h4, h5, h6 {
         color: #FFFFFF !important;
         font-weight: 600 !important;
     }
@@ -118,11 +118,23 @@ st.markdown("""
         border-left: 4px solid #FF4B4B;
         padding-left: 1rem;
         margin: 2rem 0 1rem 0 !important;
+        color: #FFFFFF !important;
     }
 
     h3 {
-        color: rgba(255, 255, 255, 0.9) !important;
+        color: #FFFFFF !important;
         margin: 1.5rem 0 1rem 0 !important;
+    }
+
+    /* Style pour tout le texte */
+    .stMarkdown, .stText, p, div, span, label {
+        color: #FFFFFF !important;
+    }
+
+    /* Style pour les labels des widgets */
+    .stSelectbox label, .stMultiSelect label, .stDateInput label, .stTextInput label, .stSlider label {
+        color: #FFFFFF !important;
+        font-weight: 500 !important;
     }
 
     /* ================== STYLE DES ONGLETS ================== */
@@ -197,6 +209,7 @@ st.markdown("""
         background-color: #262730 !important;
         color: #FFFFFF !important;
         border-radius: 8px !important;
+        font-size: 0.9rem !important;
     }
 
     .dataframe th {
@@ -204,16 +217,33 @@ st.markdown("""
         color: #FFFFFF !important;
         font-weight: 600 !important;
         border-bottom: 2px solid #FF4B4B !important;
+        padding: 12px 8px !important;
     }
 
     .dataframe td {
         background-color: #262730 !important;
         color: #FFFFFF !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        padding: 8px !important;
     }
 
     .dataframe tr:hover td {
         background-color: rgba(255, 75, 75, 0.1) !important;
+    }
+
+    /* Style pour le DataFrame Streamlit */
+    [data-testid="stDataFrame"] {
+        background-color: #262730 !important;
+        border-radius: 8px !important;
+        overflow: hidden !important;
+    }
+
+    [data-testid="stDataFrame"] [data-testid="stTable"] {
+        background-color: #262730 !important;
+    }
+
+    [data-testid="stDataFrame"] .element-container {
+        background-color: #262730 !important;
     }
 
     /* ================== STYLE DES BOUTONS ================== */
@@ -332,22 +362,31 @@ def configure_plotly_theme(fig, title=None):
     fig.update_layout(
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#FAFAFA', family="Arial"),
-        title_font=dict(color='#FFFFFF', size=16, family="Arial Black"),
+        font=dict(color='#FFFFFF', family="Arial", size=12),
+        title_font=dict(color='#FFFFFF', size=18, family="Arial Black"),
         legend=dict(
-            bgcolor='rgba(0,0,0,0)',
-            bordercolor='rgba(255,255,255,0.2)',
-            font=dict(color='#FAFAFA')
+            bgcolor='rgba(38, 39, 48, 0.8)',
+            bordercolor='rgba(255,255,255,0.3)',
+            borderwidth=1,
+            font=dict(color='#FFFFFF', size=11)
         ),
         xaxis=dict(
-            gridcolor='rgba(255,255,255,0.1)',
-            linecolor='rgba(255,255,255,0.2)',
-            tickfont=dict(color='#FAFAFA')
+            gridcolor='rgba(255,255,255,0.15)',
+            linecolor='rgba(255,255,255,0.3)',
+            tickfont=dict(color='#FFFFFF', size=11),
+            title_font=dict(color='#FFFFFF', size=12)
         ),
         yaxis=dict(
-            gridcolor='rgba(255,255,255,0.1)',
-            linecolor='rgba(255,255,255,0.2)',
-            tickfont=dict(color='#FAFAFA')
+            gridcolor='rgba(255,255,255,0.15)',
+            linecolor='rgba(255,255,255,0.3)',
+            tickfont=dict(color='#FFFFFF', size=11),
+            title_font=dict(color='#FFFFFF', size=12)
+        ),
+        # Configuration des couleurs de survol
+        hoverlabel=dict(
+            bgcolor='rgba(38, 39, 48, 0.9)',
+            bordercolor='rgba(255, 75, 75, 0.5)',
+            font_color='#FFFFFF'
         )
     )
     if title:
@@ -933,10 +972,7 @@ with reels:
                 df_plot['period'] = df_plot['date'].dt.to_period('M').astype(str)
             
             # Création du graphique avec Plotly
-            fig = px.line(
-                title="Évolution des métriques dans le temps (Reels)",
-                template="plotly_dark"
-            )
+            fig = px.line(template="plotly_dark")
             
             # Ajout des séries
             for metric_name in selected_metrics:
@@ -956,7 +992,8 @@ with reels:
                     hovertemplate="%{y:,.0f}"
                 )
             
-            # Configuration du graphique
+            # Configuration du thème sombre
+            fig = configure_plotly_theme(fig, "Évolution des métriques dans le temps (Reels)")
             fig.update_layout(
                 xaxis_title="Date",
                 yaxis_title="Valeur",
@@ -1006,10 +1043,9 @@ with reels:
             template="plotly_dark"
         )
         
-        fig_scatter.update_layout(
-            title=f"Relation entre la durée et {selected_kpi}",
-            height=400
-        )
+        # Configuration du thème sombre
+        fig_scatter = configure_plotly_theme(fig_scatter, f"Relation entre la durée et {selected_kpi}")
+        fig_scatter.update_layout(height=400)
         
         st.plotly_chart(fig_scatter, use_container_width=True)
         
@@ -1047,10 +1083,11 @@ with reels:
         # Création du graphique en barres
         fig_bars = px.bar(
             segment_means,
-            title=f"Moyenne de {selected_metric} par {selected_segment}",
             template="plotly_dark"
         )
         
+        # Configuration du thème sombre
+        fig_bars = configure_plotly_theme(fig_bars, f"Moyenne de {selected_metric} par {selected_segment}")
         fig_bars.update_layout(
             xaxis_title=selected_segment,
             yaxis_title=f"Moyenne de {selected_metric}",
@@ -1180,10 +1217,7 @@ with photos:
                 df_plot['period'] = df_plot['date'].dt.to_period('M').astype(str)
             
             # Création du graphique avec Plotly
-            fig = px.line(
-                title="Évolution des métriques dans le temps (Photos)",
-                template="plotly_dark"
-            )
+            fig = px.line(template="plotly_dark")
             
             # Ajout des séries
             for metric_name in selected_metrics:
@@ -1203,7 +1237,8 @@ with photos:
                     hovertemplate="%{y:,.0f}"
                 )
             
-            # Configuration du graphique
+            # Configuration du thème sombre
+            fig = configure_plotly_theme(fig, "Évolution des métriques dans le temps (Photos)")
             fig.update_layout(
                 xaxis_title="Date",
                 yaxis_title="Valeur",
@@ -1226,10 +1261,11 @@ with photos:
             df_photos,
             x='enregistrements_1k',
             nbins=20,
-            title="Distribution des enregistrements pour 1000 vues",
             template="plotly_dark"
         )
         
+        # Configuration du thème sombre
+        fig_hist = configure_plotly_theme(fig_hist, "Distribution des enregistrements pour 1000 vues")
         fig_hist.update_layout(
             xaxis_title="Enregistrements pour 1000 vues",
             yaxis_title="Nombre de photos",
@@ -1282,10 +1318,11 @@ with photos:
         # Création du graphique en barres
         fig_bars = px.bar(
             segment_means,
-            title=f"Moyenne de {selected_metric} par {selected_segment}",
             template="plotly_dark"
         )
         
+        # Configuration du thème sombre
+        fig_bars = configure_plotly_theme(fig_bars, f"Moyenne de {selected_metric} par {selected_segment}")
         fig_bars.update_layout(
             xaxis_title=selected_segment,
             yaxis_title=f"Moyenne de {selected_metric}",
@@ -1416,10 +1453,7 @@ with carousel:
                 df_plot['period'] = df_plot['date'].dt.to_period('M').astype(str)
             
             # Création du graphique avec Plotly
-            fig = px.line(
-                title="Évolution des métriques dans le temps (Carrousels)",
-                template="plotly_dark"
-            )
+            fig = px.line(template="plotly_dark")
             
             # Ajout des séries
             for metric_name in selected_metrics:
@@ -1439,7 +1473,8 @@ with carousel:
                     hovertemplate="%{y:,.0f}"
                 )
             
-            # Configuration du graphique
+            # Configuration du thème sombre
+            fig = configure_plotly_theme(fig, "Évolution des métriques dans le temps (Carrousels)")
             fig.update_layout(
                 xaxis_title="Date",
                 yaxis_title="Valeur",
@@ -1480,10 +1515,9 @@ with carousel:
             template="plotly_dark"
         )
         
-        fig_scatter.update_layout(
-            title=f"Relation entre le nombre d'images et {selected_kpi}",
-            height=400
-        )
+        # Configuration du thème sombre
+        fig_scatter = configure_plotly_theme(fig_scatter, f"Relation entre le nombre d'images et {selected_kpi}")
+        fig_scatter.update_layout(height=400)
         
         st.plotly_chart(fig_scatter, use_container_width=True)
         
@@ -1522,10 +1556,11 @@ with carousel:
         # Création du graphique en barres
         fig_bars = px.bar(
             segment_means,
-            title=f"Moyenne de {selected_metric} par {selected_segment}",
             template="plotly_dark"
         )
         
+        # Configuration du thème sombre
+        fig_bars = configure_plotly_theme(fig_bars, f"Moyenne de {selected_metric} par {selected_segment}")
         fig_bars.update_layout(
             xaxis_title=selected_segment,
             yaxis_title=f"Moyenne de {selected_metric}",
@@ -1662,7 +1697,6 @@ with charts:
                     df_agg,
                     x='segment',
                     y='value',
-                    title=f"{aggregation} par {selected_segment}",
                     template="plotly_dark"
                 )
             else:
@@ -1673,7 +1707,6 @@ with charts:
                     y='value',
                     color='metric',
                     barmode='group',
-                    title=f"{aggregation} par {selected_segment}",
                     template="plotly_dark"
                 )
         
@@ -1685,7 +1718,6 @@ with charts:
                     df_agg,
                     values='value',
                     names='segment',
-                    title=f"{aggregation} par {selected_segment}",
                     template="plotly_dark"
                 )
         
@@ -1696,11 +1728,11 @@ with charts:
                 y='value',
                 color='metric',
                 markers=True,
-                title=f"{aggregation} par {selected_segment}",
                 template="plotly_dark"
             )
         
-        # Configuration commune
+        # Configuration du thème sombre uniforme
+        fig = configure_plotly_theme(fig, f"{aggregation} par {selected_segment}")
         fig.update_layout(
             height=500,
             xaxis_title=selected_segment,
