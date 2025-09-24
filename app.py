@@ -22,134 +22,239 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Force le thème sombre
+# Configuration CSS complète pour thème sombre cohérent
 st.markdown("""
 <style>
+    /* ================== CONFIGURATION GLOBALE ================== */
     .stApp {
-        background-color: #0E1117;
-        color: #FAFAFA;
+        background-color: #0E1117 !important;
+        color: #FAFAFA !important;
     }
     
-    .main {
-        background-color: #0E1117;
+    .main .block-container {
+        padding-left: 2rem;
+        padding-right: 2rem;
+        max-width: 100%;
+        background-color: #0E1117 !important;
     }
-</style>
-""", unsafe_allow_html=True)
 
-# Style CSS
-st.markdown("""
-<style>
     /* Cache complètement la sidebar */
     [data-testid="stSidebar"] {
         display: none !important;
     }
     
-    /* Ajuste la largeur du contenu principal */
-    .main .block-container {
-        padding-left: 2rem;
-        padding-right: 2rem;
-        max-width: 100%;
+    /* ================== STYLE DES MÉTRIQUES ================== */
+    [data-testid="stMetric"] {
+        background: linear-gradient(135deg, #262730 0%, #1E2028 100%) !important;
+        border: 1px solid rgba(255, 75, 75, 0.3) !important;
+        border-radius: 12px !important;
+        padding: 1.5rem !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+        transition: all 0.3s ease !important;
     }
 
-    /* Style des métriques */
-    [data-testid="stMetric"] {
-        background-color: rgba(28, 31, 38, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-        padding: 1rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    [data-testid="stMetric"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(255, 75, 75, 0.2) !important;
+        border-color: rgba(255, 75, 75, 0.5) !important;
     }
 
     [data-testid="stMetric"] > div {
-        justify-content: center;
+        justify-content: center !important;
     }
 
     [data-testid="stMetric"] label {
-        color: rgba(255, 255, 255, 0.7) !important;
+        color: rgba(255, 255, 255, 0.8) !important;
+        font-weight: 500 !important;
+        font-size: 0.9rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
     }
 
-    [data-testid="stMetric"] .metric-value {
-        color: white !important;
-        font-weight: 600 !important;
+    [data-testid="stMetric"] [data-testid="metric-value"] {
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        font-size: 2rem !important;
     }
 
-    /* Style des sections */
-    [data-testid="stHeader"] {
-        background-color: rgba(28, 31, 38, 0.5);
-        padding: 1rem;
-        border-radius: 8px;
-        margin-bottom: 1rem;
-        border-left: 3px solid rgba(255, 75, 75, 0.8);
+    [data-testid="stMetric"] [data-testid="metric-delta"] {
+        color: #FF4B4B !important;
     }
 
-    /* Style des graphiques */
-    [data-testid="stPlotlyChart"] {
-        background-color: rgba(28, 31, 38, 0.5);
-        border-radius: 8px;
-        padding: 1rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    /* Style des sélecteurs */
-    .stSelectbox, .stMultiSelect {
-        background-color: rgba(28, 31, 38, 0.7);
-        border-radius: 8px;
-        padding: 0.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    /* Style des onglets */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background-color: rgba(28, 31, 38, 0.5);
-        padding: 0.5rem;
-        border-radius: 8px;
-    }
-
-    .stTabs [data-baseweb="tab"] {
-        border-radius: 4px;
-        padding: 0.5rem 1rem;
-        background-color: transparent;
-    }
-
-    .stTabs [data-baseweb="tab"]:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .stTabs [aria-selected="true"] {
-        background-color: rgba(255, 75, 75, 0.2) !important;
-        border-color: rgba(255, 75, 75, 0.8) !important;
-    }
-
+    /* ================== STYLE DE L'EN-TÊTE ================== */
     .header-container {
-        padding: 1rem 0;
-        margin-bottom: 1.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .title-section {
-        flex: 1;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid rgba(255, 75, 75, 0.3);
+        background: linear-gradient(135deg, rgba(255, 75, 75, 0.1) 0%, transparent 50%);
+        border-radius: 12px;
     }
 
     .main-title {
-        font-size: 3.2rem !important;
-        font-weight: 700 !important;
+        font-size: 3.5rem !important;
+        font-weight: 800 !important;
+        background: linear-gradient(135deg, #FFFFFF 0%, #FF4B4B 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         margin-bottom: 0.5rem !important;
-        color: white !important;
         line-height: 1.2 !important;
     }
 
     .analytics-section {
+        font-size: 1.8rem !important;
+        font-weight: 600 !important;
+        color: rgba(255, 255, 255, 0.9) !important;
         text-align: right;
-        font-size: 2rem !important;
-        font-weight: 500 !important;
-        color: rgba(255, 255, 255, 0.85) !important;
     }
 
+    /* ================== STYLE DES SECTIONS ================== */
+    h1, h2, h3 {
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+    }
 
+    h2 {
+        border-left: 4px solid #FF4B4B;
+        padding-left: 1rem;
+        margin: 2rem 0 1rem 0 !important;
+    }
+
+    h3 {
+        color: rgba(255, 255, 255, 0.9) !important;
+        margin: 1.5rem 0 1rem 0 !important;
+    }
+
+    /* ================== STYLE DES ONGLETS ================== */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 4px;
+        background: linear-gradient(135deg, #262730 0%, #1E2028 100%);
+        padding: 0.5rem;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 8px;
+        padding: 0.8rem 1.5rem;
+        background-color: transparent;
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .stTabs [data-baseweb="tab"]:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #FF4B4B 0%, #FF6B6B 100%) !important;
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+        box-shadow: 0 2px 8px rgba(255, 75, 75, 0.3);
+    }
+
+    /* ================== STYLE DES CONTRÔLES ================== */
+    .stSelectbox > div > div {
+        background-color: #262730 !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 8px !important;
+        color: #FFFFFF !important;
+    }
+
+    .stMultiSelect > div > div {
+        background-color: #262730 !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 8px !important;
+    }
+
+    .stDateInput > div > div {
+        background-color: #262730 !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 8px !important;
+        color: #FFFFFF !important;
+    }
+
+    .stTextInput > div > div {
+        background-color: #262730 !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 8px !important;
+        color: #FFFFFF !important;
+    }
+
+    /* ================== STYLE DES GRAPHIQUES ================== */
+    [data-testid="stPlotlyChart"] {
+        background: linear-gradient(135deg, #262730 0%, #1E2028 100%) !important;
+        border-radius: 12px !important;
+        padding: 1rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* ================== STYLE DU TABLEAU ================== */
+    .dataframe {
+        background-color: #262730 !important;
+        color: #FFFFFF !important;
+        border-radius: 8px !important;
+    }
+
+    .dataframe th {
+        background-color: #1E2028 !important;
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+        border-bottom: 2px solid #FF4B4B !important;
+    }
+
+    .dataframe td {
+        background-color: #262730 !important;
+        color: #FFFFFF !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .dataframe tr:hover td {
+        background-color: rgba(255, 75, 75, 0.1) !important;
+    }
+
+    /* ================== STYLE DES BOUTONS ================== */
+    .stDownloadButton > button {
+        background: linear-gradient(135deg, #FF4B4B 0%, #FF6B6B 100%) !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.6rem 1.5rem !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .stDownloadButton > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(255, 75, 75, 0.4) !important;
+    }
+
+    /* ================== STYLE DES ALERTES ================== */
+    .stAlert {
+        background-color: rgba(255, 193, 7, 0.1) !important;
+        border: 1px solid rgba(255, 193, 7, 0.3) !important;
+        border-radius: 8px !important;
+        color: #FFC107 !important;
+    }
+
+    /* ================== STYLE DES SLIDERS ================== */
+    .stSlider > div > div > div {
+        background-color: #262730 !important;
+    }
+
+    /* ================== RESPONSIVE ================== */
+    @media (max-width: 768px) {
+        .main-title {
+            font-size: 2.5rem !important;
+        }
+        
+        .analytics-section {
+            font-size: 1.4rem !important;
+        }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -220,6 +325,34 @@ def format_number(x):
         else:
             return f"{x:,.0f}".replace(',', ' ')
     return str(x)
+
+# Fonction pour configurer le thème des graphiques Plotly
+def configure_plotly_theme(fig, title=None):
+    """Configure un graphique Plotly avec le thème sombre MOE"""
+    fig.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='#FAFAFA', family="Arial"),
+        title_font=dict(color='#FFFFFF', size=16, family="Arial Black"),
+        legend=dict(
+            bgcolor='rgba(0,0,0,0)',
+            bordercolor='rgba(255,255,255,0.2)',
+            font=dict(color='#FAFAFA')
+        ),
+        xaxis=dict(
+            gridcolor='rgba(255,255,255,0.1)',
+            linecolor='rgba(255,255,255,0.2)',
+            tickfont=dict(color='#FAFAFA')
+        ),
+        yaxis=dict(
+            gridcolor='rgba(255,255,255,0.1)',
+            linecolor='rgba(255,255,255,0.2)',
+            tickfont=dict(color='#FAFAFA')
+        )
+    )
+    if title:
+        fig.update_layout(title=title)
+    return fig
 
 # Fonction pour déterminer la période de la journée
 def get_heure_bin(heure):
@@ -592,9 +725,11 @@ with overview:
         
         # Création du graphique avec Plotly
         fig = px.line(
-            title="Évolution des métriques dans le temps",
             template="plotly_dark"
         )
+        
+        # Configuration du thème sombre uniforme
+        fig = configure_plotly_theme(fig, "Évolution des métriques dans le temps")
         
         # Ajout des séries
         for metric_name in selected_metrics:
@@ -658,12 +793,13 @@ with overview:
         heatmap_data,
         labels=dict(x="Heure", y="Jour", color="Vues (médiane)"),
         aspect="auto",
-        template="plotly_dark"
+        template="plotly_dark",
+        color_continuous_scale="Reds"
     )
     
     # Configuration de la heatmap
+    fig_heatmap = configure_plotly_theme(fig_heatmap, "Heatmap des vues par jour et heure")
     fig_heatmap.update_layout(
-        title="Heatmap des vues par jour et heure",
         height=400,
         xaxis_title="Heure",
         yaxis_title="Jour"
