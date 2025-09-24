@@ -11,7 +11,8 @@ import pytz
 try:
     locale.setlocale(locale.LC_ALL, 'fr_FR.UTF-8')
 except:
-    st.warning("⚠️ La locale fr_FR.UTF-8 n'est pas installée. Le formatage des nombres pourrait être incorrect.")
+    # Locale française non disponible sur Streamlit Cloud - utiliser formatage manuel
+    pass
 
 # Configuration Streamlit
 st.set_page_config(
@@ -20,6 +21,20 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+
+# Force le thème sombre
+st.markdown("""
+<style>
+    .stApp {
+        background-color: #0E1117;
+        color: #FAFAFA;
+    }
+    
+    .main {
+        background-color: #0E1117;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # Style CSS
 st.markdown("""
