@@ -243,49 +243,71 @@ st.markdown("""
         background-color: rgba(255, 75, 75, 0.1) !important;
     }
 
-    /* Style pour le DataFrame Streamlit - ULTRA FORCÉ */
-    [data-testid="stDataFrame"], 
-    [data-testid="stDataFrame"] *, 
-    [data-testid="stDataFrame"] div,
-    [data-testid="stDataFrame"] table,
-    [data-testid="stDataFrame"] tbody,
-    [data-testid="stDataFrame"] thead,
-    [data-testid="stDataFrame"] tr,
-    [data-testid="stDataFrame"] td,
-    [data-testid="stDataFrame"] th {
-        background-color: #262730 !important;
-        background: #262730 !important;
-        color: #FFFFFF !important;
+    /* Style pour le DataFrame Streamlit - AVEC CONTRASTES */
+    [data-testid="stDataFrame"] {
+        background-color: #1E2028 !important;
+        background: #1E2028 !important;
         border-radius: 8px !important;
         overflow: hidden !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Container du tableau */
+    [data-testid="stDataFrame"] div {
+        background-color: transparent !important;
+        background: transparent !important;
     }
 
     /* Forcer spécifiquement les cellules du tableau */
     [data-testid="stDataFrame"] table {
-        background-color: #262730 !important;
-        border-collapse: collapse !important;
+        background-color: transparent !important;
+        background: transparent !important;
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+        width: 100% !important;
     }
 
+    /* EN-TÊTES avec contraste fort */
     [data-testid="stDataFrame"] th {
-        background-color: #1E2028 !important;
-        background: #1E2028 !important;
+        background-color: #0D1117 !important;
+        background: #0D1117 !important;
         color: #FFFFFF !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
+        font-size: 0.9rem !important;
         border-bottom: 2px solid #FF4B4B !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
         padding: 12px 8px !important;
+        text-align: left !important;
     }
 
+    /* CELLULES avec contraste modéré */
     [data-testid="stDataFrame"] td {
         background-color: #262730 !important;
         background: #262730 !important;
-        color: #FFFFFF !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-        padding: 8px !important;
+        color: #E6E6E6 !important;
+        font-size: 0.85rem !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+        padding: 10px 8px !important;
+        text-align: left !important;
     }
 
+    /* LIGNES alternées pour meilleure lisibilité */
+    [data-testid="stDataFrame"] tr:nth-child(even) td {
+        background-color: #2A2D3A !important;
+        background: #2A2D3A !important;
+    }
+
+    [data-testid="stDataFrame"] tr:nth-child(odd) td {
+        background-color: #262730 !important;
+        background: #262730 !important;
+    }
+
+    /* HOVER avec couleur distinctive */
     [data-testid="stDataFrame"] tr:hover td {
-        background-color: rgba(255, 75, 75, 0.1) !important;
-        background: rgba(255, 75, 75, 0.1) !important;
+        background-color: rgba(255, 75, 75, 0.15) !important;
+        background: rgba(255, 75, 75, 0.15) !important;
+        color: #FFFFFF !important;
     }
 
     /* Forcer TOUS les containers du DataFrame */
@@ -521,43 +543,79 @@ new MutationObserver(forceDarkTheme).observe(document.body, {
 // Exécuter avec une fréquence modérée pour éviter les conflits
 setInterval(forceDarkTheme, 1000);
 
-// FONCTION SPÉCIALE pour forcer les tableaux récalcitrants (VERSION SÉCURISÉE)
+// FONCTION SPÉCIALE pour appliquer les contrastes du tableau
 function forceTableTheme() {
     // Cibler uniquement les DataFrames de Streamlit
     const dataframes = document.querySelectorAll('[data-testid="stDataFrame"]');
     
     dataframes.forEach(df => {
-        // Forcer le container principal
-        df.style.setProperty('background-color', '#262730', 'important');
+        // Container principal avec bordure
+        df.style.setProperty('background-color', '#1E2028', 'important');
+        df.style.setProperty('border', '1px solid rgba(255, 255, 255, 0.1)', 'important');
+        df.style.setProperty('border-radius', '8px', 'important');
         
-        // Cibler les tableaux dans le DataFrame
+        // Tableaux transparents
         const tables = df.querySelectorAll('table');
         tables.forEach(table => {
-            table.style.setProperty('background-color', '#262730', 'important');
-            table.style.setProperty('color', '#FFFFFF', 'important');
+            table.style.setProperty('background-color', 'transparent', 'important');
+            table.style.setProperty('border-collapse', 'separate', 'important');
+            table.style.setProperty('border-spacing', '0', 'important');
         });
         
-        // Cibler spécifiquement les en-têtes
+        // EN-TÊTES avec contraste maximal
         const headers = df.querySelectorAll('th');
         headers.forEach(header => {
-            // Ne pas supprimer le contenu, juste changer le style
-            header.style.setProperty('background-color', '#1E2028', 'important');
+            header.style.setProperty('background-color', '#0D1117', 'important');
             header.style.setProperty('color', '#FFFFFF', 'important');
+            header.style.setProperty('font-weight', '700', 'important');
             header.style.setProperty('border-bottom', '2px solid #FF4B4B', 'important');
+            header.style.setProperty('border-right', '1px solid rgba(255, 255, 255, 0.1)', 'important');
+            header.style.setProperty('padding', '12px 8px', 'important');
         });
         
-        // Cibler les cellules
+        // CELLULES avec alternance de couleurs
         const cells = df.querySelectorAll('td');
-        cells.forEach(cell => {
-            cell.style.setProperty('background-color', '#262730', 'important');
-            cell.style.setProperty('color', '#FFFFFF', 'important');
-            cell.style.setProperty('border-bottom', '1px solid rgba(255, 255, 255, 0.1)', 'important');
+        cells.forEach((cell, index) => {
+            const row = cell.parentElement;
+            const rowIndex = Array.from(row.parentElement.children).indexOf(row);
+            
+            // Couleurs alternées
+            if (rowIndex % 2 === 0) {
+                cell.style.setProperty('background-color', '#262730', 'important');
+            } else {
+                cell.style.setProperty('background-color', '#2A2D3A', 'important');
+            }
+            
+            cell.style.setProperty('color', '#E6E6E6', 'important');
+            cell.style.setProperty('font-size', '0.85rem', 'important');
+            cell.style.setProperty('border-bottom', '1px solid rgba(255, 255, 255, 0.08)', 'important');
+            cell.style.setProperty('border-right', '1px solid rgba(255, 255, 255, 0.05)', 'important');
+            cell.style.setProperty('padding', '10px 8px', 'important');
         });
         
-        // Forcer les lignes
-        const rows = df.querySelectorAll('tr');
+        // LIGNES avec effet hover
+        const rows = df.querySelectorAll('tbody tr');
         rows.forEach(row => {
-            row.style.setProperty('background-color', '#262730', 'important');
+            row.addEventListener('mouseenter', () => {
+                const cells = row.querySelectorAll('td');
+                cells.forEach(cell => {
+                    cell.style.setProperty('background-color', 'rgba(255, 75, 75, 0.15)', 'important');
+                    cell.style.setProperty('color', '#FFFFFF', 'important');
+                });
+            });
+            
+            row.addEventListener('mouseleave', () => {
+                const cells = row.querySelectorAll('td');
+                const rowIndex = Array.from(row.parentElement.children).indexOf(row);
+                cells.forEach(cell => {
+                    if (rowIndex % 2 === 0) {
+                        cell.style.setProperty('background-color', '#262730', 'important');
+                    } else {
+                        cell.style.setProperty('background-color', '#2A2D3A', 'important');
+                    }
+                    cell.style.setProperty('color', '#E6E6E6', 'important');
+                });
+            });
         });
     });
 }
