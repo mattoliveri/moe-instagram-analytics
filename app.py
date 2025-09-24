@@ -500,43 +500,14 @@ function forceDarkTheme() {
         input.style.border = '1px solid rgba(255, 255, 255, 0.2)';
     });
     
-    // FORCE SPÉCIALE pour les DataFrames de Streamlit
+    // FORCE MODÉRÉE pour les DataFrames de Streamlit
     const dataframes = document.querySelectorAll('[data-testid="stDataFrame"]');
     dataframes.forEach(df => {
-        // Forcer le container principal
-        df.style.backgroundColor = '#262730';
-        df.style.color = '#FFFFFF';
-        
-        // Forcer TOUS les éléments enfants
-        const allChildren = df.querySelectorAll('*');
-        allChildren.forEach(child => {
-            child.style.backgroundColor = '#262730';
-            child.style.color = '#FFFFFF';
-        });
-        
-        // Forcer spécifiquement les tables
-        const tables = df.querySelectorAll('table, tbody, thead, tr, td, th');
-        tables.forEach(table => {
-            table.style.backgroundColor = '#262730';
-            table.style.color = '#FFFFFF';
-        });
-        
-        // Forcer les en-têtes de colonnes
-        const headers = df.querySelectorAll('th');
-        headers.forEach(header => {
-            header.style.backgroundColor = '#1E2028';
-            header.style.color = '#FFFFFF';
-            header.style.fontWeight = '600';
-            header.style.borderBottom = '2px solid #FF4B4B';
-        });
-        
-        // Forcer les cellules
-        const cells = df.querySelectorAll('td');
-        cells.forEach(cell => {
-            cell.style.backgroundColor = '#262730';
-            cell.style.color = '#FFFFFF';
-            cell.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
-        });
+        // Forcer seulement le style de base sans toucher au contenu
+        if (df.style.backgroundColor !== '#262730') {
+            df.style.backgroundColor = '#262730';
+            df.style.color = '#FFFFFF';
+        }
     });
 }
 
@@ -547,43 +518,52 @@ new MutationObserver(forceDarkTheme).observe(document.body, {
     subtree: true
 });
 
-// Exécuter plus souvent pour capturer les éléments tardifs
-setInterval(forceDarkTheme, 100);
+// Exécuter avec une fréquence modérée pour éviter les conflits
+setInterval(forceDarkTheme, 1000);
 
-// FONCTION SPÉCIALE pour forcer les tableaux récalcitrants
+// FONCTION SPÉCIALE pour forcer les tableaux récalcitrants (VERSION SÉCURISÉE)
 function forceTableTheme() {
-    // Cibler TOUS les tableaux
-    const tables = document.querySelectorAll('table, thead, tbody, tr, th, td');
-    tables.forEach(element => {
-        element.style.setProperty('background-color', '#262730', 'important');
-        element.style.setProperty('background', '#262730', 'important');
-        element.style.setProperty('color', '#FFFFFF', 'important');
-    });
+    // Cibler uniquement les DataFrames de Streamlit
+    const dataframes = document.querySelectorAll('[data-testid="stDataFrame"]');
     
-    // Cibler spécifiquement les en-têtes
-    const headers = document.querySelectorAll('th');
-    headers.forEach(header => {
-        header.style.setProperty('background-color', '#1E2028', 'important');
-        header.style.setProperty('background', '#1E2028', 'important');
-        header.style.setProperty('color', '#FFFFFF', 'important');
-        header.style.setProperty('border-bottom', '2px solid #FF4B4B', 'important');
-    });
-    
-    // Utiliser removeAttribute puis remettre le style pour forcer
-    document.querySelectorAll('[data-testid="stDataFrame"] *').forEach(el => {
-        // Supprimer tous les styles inline qui pourraient bloquer
-        if (el.style.backgroundColor === 'white' || 
-            el.style.backgroundColor === '#ffffff' ||
-            el.style.backgroundColor === 'rgb(255, 255, 255)') {
-            el.removeAttribute('style');
-        }
-        el.style.setProperty('background-color', '#262730', 'important');
-        el.style.setProperty('color', '#FFFFFF', 'important');
+    dataframes.forEach(df => {
+        // Forcer le container principal
+        df.style.setProperty('background-color', '#262730', 'important');
+        
+        // Cibler les tableaux dans le DataFrame
+        const tables = df.querySelectorAll('table');
+        tables.forEach(table => {
+            table.style.setProperty('background-color', '#262730', 'important');
+            table.style.setProperty('color', '#FFFFFF', 'important');
+        });
+        
+        // Cibler spécifiquement les en-têtes
+        const headers = df.querySelectorAll('th');
+        headers.forEach(header => {
+            // Ne pas supprimer le contenu, juste changer le style
+            header.style.setProperty('background-color', '#1E2028', 'important');
+            header.style.setProperty('color', '#FFFFFF', 'important');
+            header.style.setProperty('border-bottom', '2px solid #FF4B4B', 'important');
+        });
+        
+        // Cibler les cellules
+        const cells = df.querySelectorAll('td');
+        cells.forEach(cell => {
+            cell.style.setProperty('background-color', '#262730', 'important');
+            cell.style.setProperty('color', '#FFFFFF', 'important');
+            cell.style.setProperty('border-bottom', '1px solid rgba(255, 255, 255, 0.1)', 'important');
+        });
+        
+        // Forcer les lignes
+        const rows = df.querySelectorAll('tr');
+        rows.forEach(row => {
+            row.style.setProperty('background-color', '#262730', 'important');
+        });
     });
 }
 
-// Exécuter la fonction spéciale table encore plus souvent
-setInterval(forceTableTheme, 50);
+// Exécuter la fonction spéciale table moins souvent pour éviter les conflits
+setInterval(forceTableTheme, 200);
 </script>
 """, unsafe_allow_html=True)
 
