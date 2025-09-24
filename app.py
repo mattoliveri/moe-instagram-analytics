@@ -22,6 +22,167 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+# ======================== SYSTÈME D'AUTHENTIFICATION ========================
+
+# Initialisation de l'état de session
+if 'authenticated' not in st.session_state:
+    st.session_state.authenticated = False
+
+# Fonction d'authentification
+def authenticate_user(username, password):
+    """Vérifier les identifiants utilisateur"""
+    return username == "admin" and password == "AdminMOE13"
+
+# Écran de connexion
+def show_login_screen():
+    """Afficher l'écran de connexion avec le thème MOE"""
+    
+    # CSS pour l'écran de connexion
+    st.markdown("""
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #262730 0%, #1E2028 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 75, 75, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-top: 10vh;
+        }
+        
+        .login-title {
+            text-align: center;
+            color: #FFFFFF;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #FFFFFF 0%, #FF4B4B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .login-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .login-input {
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #FFFFFF;
+            font-size: 1rem;
+        }
+        
+        .login-input:focus {
+            outline: none;
+            border-color: #FF4B4B;
+            box-shadow: 0 0 0 2px rgba(255, 75, 75, 0.2);
+        }
+        
+        .login-button {
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg, #FF4B4B 0%, #FF6B6B 100%);
+            color: #FFFFFF;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 75, 75, 0.4);
+        }
+        
+        .login-error {
+            background-color: rgba(255, 75, 75, 0.1);
+            border: 1px solid rgba(255, 75, 75, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            color: #FF6B6B;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        /* Style global pour la page de connexion */
+        .stApp {
+            background: linear-gradient(135deg, #0E1117 0%, #1A1B23 100%);
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Conteneur de connexion
+    st.markdown("""
+    <div class="login-container">
+        <h1 class="login-title">MOE Analytics</h1>
+        <p class="login-subtitle">Marseille Outdoor Experiences</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Formulaire de connexion
+    with st.container():
+        col1, col2, col3 = st.columns([1, 2, 1])
+        
+        with col2:
+            st.markdown("### 🔐 Connexion")
+            
+            # Champs de saisie
+            username = st.text_input(
+                "Identifiant",
+                placeholder="Entrez votre identifiant",
+                key="login_username"
+            )
+            
+            password = st.text_input(
+                "Mot de passe",
+                type="password",
+                placeholder="Entrez votre mot de passe",
+                key="login_password"
+            )
+            
+            # Bouton de connexion
+            if st.button("Se connecter", key="login_button", use_container_width=True):
+                if authenticate_user(username, password):
+                    st.session_state.authenticated = True
+                    st.rerun()
+                else:
+                    st.error("❌ Identifiant ou mot de passe incorrect")
+            
+            # Information d'aide (à supprimer en production)
+            with st.expander("ℹ️ Informations de connexion", expanded=False):
+                st.info("""
+                **Identifiants de test :**
+                - Identifiant : `admin`
+                - Mot de passe : `AdminMOE13`
+                """)
+
+# Fonction de déconnexion
+def logout():
+    """Déconnecter l'utilisateur"""
+    st.session_state.authenticated = False
+    st.rerun()
+
+# Vérification de l'authentification
+if not st.session_state.authenticated:
+    show_login_screen()
+    st.stop()
+
+# ======================== FIN SYSTÈME D'AUTHENTIFICATION ========================
+
 # Configuration CSS complète pour thème sombre cohérent
 st.markdown("""
 <style>
@@ -625,17 +786,25 @@ setInterval(forceTableTheme, 200);
 </script>
 """, unsafe_allow_html=True)
 
-# En-tête principal
-st.markdown("""
-<div class="header-container">
-    <div class="title-section">
-        <h1 class="main-title">MOE - Marseille Outdoor Experiences</h1>
+# En-tête principal avec bouton de déconnexion
+col_title, col_logout = st.columns([6, 1])
+
+with col_title:
+    st.markdown("""
+    <div class="header-container">
+        <div class="title-section">
+            <h1 class="main-title">MOE - Marseille Outdoor Experiences</h1>
+        </div>
+        <div class="analytics-section">
+            Instagram Analytics
+        </div>
     </div>
-    <div class="analytics-section">
-        Instagram Analytics
-    </div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
+
+with col_logout:
+    st.markdown("<div style='height: 50px;'></div>", unsafe_allow_html=True)  # Espacement
+    if st.button("🚪 Déconnexion", key="logout_button", help="Se déconnecter du dashboard"):
+        logout()
 
 # Chemin du fichier de données
 DATA_PATH = "./insta_data.csv"
