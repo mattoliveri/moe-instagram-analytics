@@ -243,19 +243,64 @@ st.markdown("""
         background-color: rgba(255, 75, 75, 0.1) !important;
     }
 
-    /* Style pour le DataFrame Streamlit */
-    [data-testid="stDataFrame"] {
+    /* Style pour le DataFrame Streamlit - ULTRA FORCÉ */
+    [data-testid="stDataFrame"], 
+    [data-testid="stDataFrame"] *, 
+    [data-testid="stDataFrame"] div,
+    [data-testid="stDataFrame"] table,
+    [data-testid="stDataFrame"] tbody,
+    [data-testid="stDataFrame"] thead,
+    [data-testid="stDataFrame"] tr,
+    [data-testid="stDataFrame"] td,
+    [data-testid="stDataFrame"] th {
         background-color: #262730 !important;
+        background: #262730 !important;
+        color: #FFFFFF !important;
         border-radius: 8px !important;
         overflow: hidden !important;
     }
 
-    [data-testid="stDataFrame"] [data-testid="stTable"] {
+    /* Forcer spécifiquement les cellules du tableau */
+    [data-testid="stDataFrame"] table {
         background-color: #262730 !important;
+        border-collapse: collapse !important;
     }
 
-    [data-testid="stDataFrame"] .element-container {
+    [data-testid="stDataFrame"] th {
+        background-color: #1E2028 !important;
+        background: #1E2028 !important;
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+        border-bottom: 2px solid #FF4B4B !important;
+        padding: 12px 8px !important;
+    }
+
+    [data-testid="stDataFrame"] td {
         background-color: #262730 !important;
+        background: #262730 !important;
+        color: #FFFFFF !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        padding: 8px !important;
+    }
+
+    [data-testid="stDataFrame"] tr:hover td {
+        background-color: rgba(255, 75, 75, 0.1) !important;
+        background: rgba(255, 75, 75, 0.1) !important;
+    }
+
+    /* Forcer TOUS les containers du DataFrame */
+    [data-testid="stDataFrame"] [data-testid="stTable"],
+    [data-testid="stDataFrame"] .element-container,
+    [data-testid="stDataFrame"] .stTable,
+    [data-testid="stDataFrame"] .dataframe-container {
+        background-color: #262730 !important;
+        background: #262730 !important;
+    }
+
+    /* Règle d'urgence pour TOUT élément dans stDataFrame */
+    [data-testid="stDataFrame"] [style*="background"] {
+        background-color: #262730 !important;
+        background: #262730 !important;
     }
 
     /* ================== STYLE DES BOUTONS ================== */
@@ -404,6 +449,45 @@ function forceDarkTheme() {
         input.style.backgroundColor = '#262730';
         input.style.color = '#FFFFFF';
         input.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+    });
+    
+    // FORCE SPÉCIALE pour les DataFrames de Streamlit
+    const dataframes = document.querySelectorAll('[data-testid="stDataFrame"]');
+    dataframes.forEach(df => {
+        // Forcer le container principal
+        df.style.backgroundColor = '#262730';
+        df.style.color = '#FFFFFF';
+        
+        // Forcer TOUS les éléments enfants
+        const allChildren = df.querySelectorAll('*');
+        allChildren.forEach(child => {
+            child.style.backgroundColor = '#262730';
+            child.style.color = '#FFFFFF';
+        });
+        
+        // Forcer spécifiquement les tables
+        const tables = df.querySelectorAll('table, tbody, thead, tr, td, th');
+        tables.forEach(table => {
+            table.style.backgroundColor = '#262730';
+            table.style.color = '#FFFFFF';
+        });
+        
+        // Forcer les en-têtes de colonnes
+        const headers = df.querySelectorAll('th');
+        headers.forEach(header => {
+            header.style.backgroundColor = '#1E2028';
+            header.style.color = '#FFFFFF';
+            header.style.fontWeight = '600';
+            header.style.borderBottom = '2px solid #FF4B4B';
+        });
+        
+        // Forcer les cellules
+        const cells = df.querySelectorAll('td');
+        cells.forEach(cell => {
+            cell.style.backgroundColor = '#262730';
+            cell.style.color = '#FFFFFF';
+            cell.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
+        });
     });
 }
 
