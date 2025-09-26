@@ -1267,7 +1267,27 @@ with overview:
         total_followers = df['followers_plus'].sum()
         st.metric("Nouveaux followers", f"{total_followers:,.0f}".replace(',', ' '))
     
-    # Deuxième ligne de KPIs
+    # Deuxième ligne de KPIs - Likes, Commentaires, Partages
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        total_likes = df['likes'].sum()
+        avg_likes = df['likes'].mean()
+        st.metric("Likes total", f"{total_likes:,.0f}".replace(',', ' '), 
+                 delta=f"Moy: {avg_likes:.0f}")
+    
+    with col2:
+        total_commentaires = df['commentaires'].sum()
+        avg_commentaires = df['commentaires'].mean()
+        st.metric("Commentaires total", f"{total_commentaires:,.0f}".replace(',', ' '), 
+                 delta=f"Moy: {avg_commentaires:.0f}")
+    
+    with col3:
+        total_partages = df['partages'].sum()
+        avg_partages = df['partages'].mean()
+        st.metric("Partages total", f"{total_partages:,.0f}".replace(',', ' '), 
+                 delta=f"Moy: {avg_partages:.0f}")
+    
+    # Troisième ligne de KPIs
     col1, col2, col3 = st.columns(3)
     with col1:
         median_engagement = df['taux_engagement'].median()
@@ -1473,7 +1493,27 @@ with reels:
             total_followers_reels = df_reels['followers_plus'].sum()
             st.metric("Nouveaux followers", f"{total_followers_reels:,.0f}".replace(',', ' '))
         
-        # Deuxième ligne de KPIs
+        # Deuxième ligne de KPIs - Likes, Commentaires, Partages
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            total_likes_reels = df_reels['likes'].sum()
+            avg_likes_reels = df_reels['likes'].mean()
+            st.metric("Likes total", f"{total_likes_reels:,.0f}".replace(',', ' '), 
+                     delta=f"Moy: {avg_likes_reels:.0f}")
+        
+        with col2:
+            total_commentaires_reels = df_reels['commentaires'].sum()
+            avg_commentaires_reels = df_reels['commentaires'].mean()
+            st.metric("Commentaires total", f"{total_commentaires_reels:,.0f}".replace(',', ' '), 
+                     delta=f"Moy: {avg_commentaires_reels:.0f}")
+        
+        with col3:
+            total_partages_reels = df_reels['partages'].sum()
+            avg_partages_reels = df_reels['partages'].mean()
+            st.metric("Partages total", f"{total_partages_reels:,.0f}".replace(',', ' '), 
+                     delta=f"Moy: {avg_partages_reels:.0f}")
+        
+        # Troisième ligne de KPIs
         col1, col2, col3 = st.columns(3)
         with col1:
             median_engagement_reels = df_reels['taux_engagement'].median()
@@ -1718,7 +1758,27 @@ with photos:
             total_followers_photos = df_photos['followers_plus'].sum()
             st.metric("Nouveaux followers", f"{total_followers_photos:,.0f}".replace(',', ' '))
         
-        # Deuxième ligne de KPIs
+        # Deuxième ligne de KPIs - Likes, Commentaires, Partages
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            total_likes_photos = df_photos['likes'].sum()
+            avg_likes_photos = df_photos['likes'].mean()
+            st.metric("Likes total", f"{total_likes_photos:,.0f}".replace(',', ' '), 
+                     delta=f"Moy: {avg_likes_photos:.0f}")
+        
+        with col2:
+            total_commentaires_photos = df_photos['commentaires'].sum()
+            avg_commentaires_photos = df_photos['commentaires'].mean()
+            st.metric("Commentaires total", f"{total_commentaires_photos:,.0f}".replace(',', ' '), 
+                     delta=f"Moy: {avg_commentaires_photos:.0f}")
+        
+        with col3:
+            total_partages_photos = df_photos['partages'].sum()
+            avg_partages_photos = df_photos['partages'].mean()
+            st.metric("Partages total", f"{total_partages_photos:,.0f}".replace(',', ' '), 
+                     delta=f"Moy: {avg_partages_photos:.0f}")
+        
+        # Troisième ligne de KPIs
         col1, col2, col3 = st.columns(3)
         with col1:
             median_engagement_photos = df_photos['taux_engagement'].median()
@@ -1954,7 +2014,27 @@ with carousel:
             total_followers_carousel = df_carousel['followers_plus'].sum()
             st.metric("Nouveaux followers", f"{total_followers_carousel:,.0f}".replace(',', ' '))
         
-        # Deuxième ligne de KPIs
+        # Deuxième ligne de KPIs - Likes, Commentaires, Partages
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            total_likes_carousel = df_carousel['likes'].sum()
+            avg_likes_carousel = df_carousel['likes'].mean()
+            st.metric("Likes total", f"{total_likes_carousel:,.0f}".replace(',', ' '), 
+                     delta=f"Moy: {avg_likes_carousel:.0f}")
+        
+        with col2:
+            total_commentaires_carousel = df_carousel['commentaires'].sum()
+            avg_commentaires_carousel = df_carousel['commentaires'].mean()
+            st.metric("Commentaires total", f"{total_commentaires_carousel:,.0f}".replace(',', ' '), 
+                     delta=f"Moy: {avg_commentaires_carousel:.0f}")
+        
+        with col3:
+            total_partages_carousel = df_carousel['partages'].sum()
+            avg_partages_carousel = df_carousel['partages'].mean()
+            st.metric("Partages total", f"{total_partages_carousel:,.0f}".replace(',', ' '), 
+                     delta=f"Moy: {avg_partages_carousel:.0f}")
+        
+        # Troisième ligne de KPIs
         col1, col2, col3 = st.columns(3)
         with col1:
             median_engagement_carousel = df_carousel['taux_engagement'].median()
